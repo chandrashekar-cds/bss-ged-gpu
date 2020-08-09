@@ -22,7 +22,7 @@ void treeNode::init(graph &g1, graph &g2)
 		gn1[i].verifyGraphNodeStr = g1.V[i];
 		for (int j = 0; j < g1.v; j++)
 		{
-			a1[i][j] = g1.E[i][j];
+			a1[i][j] = g1.edgeinfo(i,j);
 			if (a1[i][j] != 0xff)
 			{
 				tmp.push_back(j);
@@ -46,7 +46,7 @@ void treeNode::init(graph &g1, graph &g2)
 		gn2[i].verifyGraphNodeStr = g2.V[i];
 		for (int j = 0; j < g2.v; j++)
 		{
-			a2[i][j] = g2.E[i][j];
+			a2[i][j] = g2.edgeinfo(i,j);
 			if (a2[i][j] != 0xff)
 			{
 				tmp.push_back(j);

@@ -57,7 +57,7 @@ typedef struct verifyGraphNode
 	{
 		*this = t;
 	}
-	verifyGraphNode & operator= (const verifyGraphNode &t) const 
+	verifyGraphNode & operator= (const verifyGraphNode &t) 
 	{
 		if (this != &t)
 		{

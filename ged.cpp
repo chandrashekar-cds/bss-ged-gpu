@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 	int totalQuery = atoi(argv[4]);
 	const int ub = atoi(argv[5]);
 	int width = atoi(argv[6]);
-	const int sorted = 1;
+	const int sorted = 0;
 
 	const char *db_out = sorted ? "./ged_db" : db.c_str(); 
 	const char *query_out = sorted ? "./ged_query" : query.c_str();
@@ -23,6 +23,10 @@ int main(int argc, char *argv[])
 	vector<graph> queryDB = graph::readGraphMemory(query_out, totalQuery);
 	vector<graph> graphDB = graph::readGraphMemory(db_out, totalGraph);
 	if(sorted){ std::remove(db_out); std::remove(query_out);}
+
+	graph::print_mat(queryDB[0],"first_query.txt");
+	graph::print_mat(graphDB[2],"third graph.txt");
+
 	int i = 0, j = 0, bound;	
 	int sum = 0; 
 	struct timeval start,end; 

@@ -30,9 +30,9 @@ map<int, int> graph::edgeLabel(int &max_edge)
 	{
 		for (int i = j + 1; i < v; i++)
 		{
-			if (this->E[j][i] != 255)
+			if (this->edgeinfo(j,i) != 255)
 			{
-				int einfo = this->E[j][i];
+				int einfo = this->edgeinfo(j,i);
 				iter = mel.find(einfo);
 				if (iter == mel.end())
 				{
@@ -51,7 +51,7 @@ void graph::vertexDegree(int &vertex, u8 &degree)
 	for (int i = 0; i < this->v; i++)
 	{
 		if (vertex == i) continue;
-		if (this->E[i][vertex] != 0xff)
+		if (this->edgeinfo(i,vertex) != 0xff)
 			degree++;
 	}
 }
@@ -61,7 +61,7 @@ void graph::vertexDegree(int &vertex, int &degree)
 	for (int i = 0; i < this->v; i++)
 	{
 		if (vertex == i) continue;
-		if (this->E[i][vertex] != 0xff)
+		if (this->edgeinfo(i,vertex) != 0xff)
 			degree++;
 	}
 }
@@ -102,13 +102,13 @@ void graph::editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assign
 			for (int j = i + 1; j < g.v; j++)
 			{
 				int mappedVertexTwo = matching[j];
-				if (g.E[i][j] != 255)
+				if (g.edgeinfo(i,j) != 255)
 				{
 					if (mappedVertexTwo != 255)
 					{
-						if (h.E[mappedVertex][mappedVertexTwo] == 255)
+						if (h.edgeinfo(mappedVertex,mappedVertexTwo) == 255)
 							ED++;
-						else if (h.E[mappedVertex][mappedVertexTwo] != g.E[i][j])
+						else if (h.edgeinfo(mappedVertex,mappedVertexTwo) != g.edgeinfo(i,j))
 							ES++;
 						else
 							;
@@ -116,7 +116,7 @@ void graph::editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assign
 				}
 				else
 				{
-					if (mappedVertexTwo != 255 && h.E[mappedVertex][mappedVertexTwo] != 255)
+					if (mappedVertexTwo != 255 && h.edgeinfo(mappedVertex,mappedVertexTwo) != 255)
 						EI++;
 				}
 			}
@@ -125,7 +125,7 @@ void graph::editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assign
 		{
 			for (int j = i + 1; j < g.v; j++)
 			{
-				if (g.E[i][j] != 255)
+				if (g.edgeinfo(i,j) != 255)
 					ED++;
 			}
 		}
@@ -138,9 +138,9 @@ inline vector<BTuple> graph::neibhoor(int &id)
 	vector<BTuple> vp;
 	for (int i = 0; i < this->v; i++)
 	{
-		if (this->E[id][i] != 255)
+		if (this->edgeinfo(id,i) != 255)
 		{
-			vp.push_back(BTuple(i, this->E[id][i]));
+			vp.push_back(BTuple(i, this->edgeinfo(id,i)));
 		}
 	}
 	return vp;
@@ -262,7 +262,7 @@ void graph::DFS(int &i, int &order_count, vector<bool> &visited, vector<int> &ve
 	int len = 0;
 	for(int j = 0; j < v; j++)
 	{
-		if(E[i][j] != 0xff && !visited[j])
+		if(edgeinfo(i,j) != 0xff && !visited[j])
 		{
 			order_tmp[len].first = vertex_degree[j];
 			order_tmp[len].second = j;

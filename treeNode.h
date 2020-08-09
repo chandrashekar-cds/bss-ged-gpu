@@ -65,7 +65,7 @@ public:
 		}
 		return *this;
 	}
-	friend bool operator< (const treeNode &aa, const treeNode &bb) const 
+	friend bool operator< (const treeNode &aa, const treeNode &bb)
 	{
 
 		int costa = aa.deep + aa.ECost;

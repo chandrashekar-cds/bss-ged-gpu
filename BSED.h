@@ -306,13 +306,13 @@ public:
 		{
 			for (int j = 0; j < g1.v; j++)
 			{
-				if (g1.E[i][j] != 0xff)
+				if (g1.edgeinfo(i,j) != 0xff)
 				{
 					if (i < j)
 					{
-						le_1[g1.E[i][j]]++;
-						if (max_e_1 < g1.E[i][j])
-							max_e_1 = g1.E[i][j];
+						le_1[g1.edgeinfo(i,j)]++;
+						if (max_e_1 < g1.edgeinfo(i,j))
+							max_e_1 = g1.edgeinfo(i,j);
 					}
 				}
 			}
@@ -325,13 +325,13 @@ public:
 		{
 			for (int j = 0; j < g2.v; j++)
 			{
-				if (g2.E[i][j] != 0xff)
+				if (g2.edgeinfo(i,j) != 0xff)
 				{
 					if (i < j)
 					{
-						le_2[g2.E[i][j]]++;
-						if (max_e_2 < g2.E[i][j])
-							max_e_2 = g2.E[i][j];
+						le_2[g2.edgeinfo(i,j)]++;
+						if (max_e_2 < g2.edgeinfo(i,j))
+							max_e_2 = g2.edgeinfo(i,j);
 					}
 				}
 
