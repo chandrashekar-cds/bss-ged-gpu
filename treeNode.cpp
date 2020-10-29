@@ -5,7 +5,7 @@ void treeNode::init(graph &g1, graph &g2)
 {
 	uG1.init(g1); degree1 = new u8[uG1.gs]; g1.degreeSet(degree1, max_d_1); max_d_1++;
 	uG2.init(g2); degree2 = new u8[uG2.gs]; g2.degreeSet(degree2, max_d_2); max_d_2++;
-	memset(a1, 0xff, 512 * 512); memset(a2, 0xff, 512 * 512);
+	memset(a1, 0xff, 2048 * 2048); memset(a2, 0xff, 2048 * 2048);
 	adjList1.clear(); adjList2.clear();
 	max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 

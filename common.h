@@ -18,12 +18,15 @@ public:
 			else
 				s2 += ds1[i] - ds2[i]; //delete
 		}
+		cout<<"(In common.h)size = "<<size<<" s1 = "<<s1<<" s2 = "<<s2<<endl;
 		for (int i = size; i < size1; i++)
 			s2 += ds1[i];
 		for (int i = size; i < size2; i++)
 			s1 += ds2[i];
+		cout<<"(After 2 for loops)size = "<<size<<" s1 = "<<s1<<" s2 = "<<s2<<endl;	
 		if (s1 % 2) s1 = s1 / 2 + 1; else s1 = s1 / 2;
 		if (s2 % 2) s2 = s2 / 2 + 1; else s2 = s2 / 2;
+		cout<<"(In the end)size = "<<size<<" s1 = "<<s1<<" s2 = "<<s2<<endl;
 	}
 	static int degreeEditDistance(int *ds1, int &size1, int *ds2, int &size2)
 	{		

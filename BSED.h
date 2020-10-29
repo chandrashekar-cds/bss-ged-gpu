@@ -300,6 +300,7 @@ public:
 		u8 lv_1[256], lv_2[256], le_1[64], le_2[64];
 		memset(lv_1, 0, 256 * sizeof(u8)); memset(lv_2, 0, 256 * sizeof(u8));
 		memset(le_1, 0, 64 * sizeof(u8)); memset(le_2, 0, 64 * sizeof(u8));
+		cout<<"Hi..inside get-edit-dist "<<endl;
 		max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 
 		for (int i = 0; i < g1.v; i++)
@@ -319,6 +320,7 @@ public:
 			if (max_v_1 < g1.V[i]) max_v_1 = g1.V[i];
 			lv_1[g1.V[i]]++;
 		}
+		cout<<"g1.edgeinfo over..."<<endl;
 		max_v_1++; max_e_1++;
 
 		for (int i = 0; i < g2.v; i++)
@@ -340,20 +342,24 @@ public:
 			lv_2[g2.V[i]]++;
 		}
 		max_v_2++; max_e_2++;
-
+        cout<<"g2.edgeinfo over..."<<endl;
 		int commonVertex = common::initCommonLabel(lv_1, lv_2, max_v_1, max_v_2);
 		int commonEdge = common::initCommonLabel(le_1, le_2, max_e_1, max_e_2);
+		cout<<"init common labels done"<<endl;
 		int lower_bound = max(g1.v, g2.v) - commonVertex + max(g1.e, g2.e) - commonEdge;
 		if (lower_bound > bound) return -1;
+        cout<<"lower_bound = "<<lower_bound<<" bound = "<<bound<<endl;
 
-		int degree_1[1024], degree_2[1024];
+		int degree_1[2048], degree_2[2048];
 		g1.degreeSet(degree_1, max_d_1); max_d_1++;
 		g2.degreeSet(degree_2, max_d_2); max_d_2++;
-		memset(tmpDegree1, 0, max_d_1 * sizeof(u8));
-		memset(tmpDegree2, 0, max_d_2 * sizeof(u8));
+		cout<<"entering memset"<<endl;
+		//memset(tmpDegree1, 0, max_d_1 * sizeof(u8));
+		//memset(tmpDegree2, 0, max_d_2 * sizeof(u8));
+		cout<<"memset done"<<endl;
 		int i = 0, max1 = 0, max2 = 0, size1 = 0, size2 = 0, ie = 0, de = 0,
 			edge1 = g1.e, edge2 = g2.e;
-
+         cout<<"some initializations done"<<endl;
 		for (int i = 0; i < g1.v; i++)
 		{
 			if (max1 < degree_1[i])
@@ -366,7 +372,7 @@ public:
 			for (int l = 0; l < len; l++)
 				ds1[size1++] = i;
 		}
-		for (i = 0; i < g2.v; i++)
+		for (int i = 0; i < g2.v; i++)
 		{
 			if (max2 < degree_2[i])
 				max2 = degree_2[i];
@@ -378,10 +384,15 @@ public:
 			for (int l = 0; l < len; l++)
 				ds2[size2++] = i;
 		}
+		cout<<"4 for loops done..  "<<"size1 = "<<size1<<"size2 = "<<size2<<endl;
 		common::degreeEditDistance(ds1, size1, ds2, size2, ie, de);
+		cout<<" safely back from degree edit dist"<<endl;
 		int tmp = max(2 * ie + edge1 - edge2, 2 * de + edge2 - edge1);
+		cout<<"tmp = "<<tmp<<" ie = "<<ie<<" de = "<<de<<endl;
 		tmp = max(tmp, edge2 - commonEdge + de);
+		cout<<"tmp = "<<tmp<<" commonVertex = "<<commonVertex<<endl;
 		lower_bound = max(g1.v, g2.v) - commonVertex + tmp;
+		cout<<"lower_bound = "<<lower_bound<<" bound = "<<bound<<endl;
 		if (lower_bound > bound) return -1;
 		else
 		{
@@ -399,10 +410,12 @@ public:
 			if (s2 > 1) VERTEXFLAG2 = true; else VERTEXFLAG2 = false;
 			if (s1 < s2)
 			{
+				cout<<"s1 < s2"<<endl;
 				return getEditDistance(g1, g2, bound, group1, group2);
 			}
 			else
 			{
+				cout<<"s1 >= s2"<<endl;
 				return getEditDistance(g2, g1, bound, group2, group1);
 			}
 		}

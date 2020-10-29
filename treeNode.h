@@ -49,9 +49,11 @@ public:
 			this->le1 = new u8[max_e_1]; memcpy(le1, tn.le1, max_e_1);
 			this->le2 = new u8[max_e_2]; memcpy(le2, tn.le2, max_e_2);
 			this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
-
-			this->degree1 = new u8[uG1.gs]; 
+            //cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
+			this->degree1 = new u8[static_cast<std::size_t>(uG1.gs)]; 
+			//cout<<"size of degree1 = "<<sizeof(this->degree1)<<" value of uG1.gs = "<<uG1.gs<<endl;
 			this->degree2 = new u8[uG2.gs];
+
 			#if 1 //here: ? 
 			if (VERTEXFLAG1)
 			{

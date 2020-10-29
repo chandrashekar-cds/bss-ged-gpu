@@ -24,8 +24,8 @@ int main(int argc, char *argv[])
 	vector<graph> graphDB = graph::readGraphMemory(db_out, totalGraph);
 	if(sorted){ std::remove(db_out); std::remove(query_out);}
 
-	graph::print_mat(queryDB[0],"first_query.txt");
-	graph::print_mat(graphDB[2],"third graph.txt");
+	//graph::print_mat(queryDB[0],"first_query.txt");
+	//graph::print_mat(graphDB[2],"third graph.txt");
 
 	int i = 0, j = 0, bound;	
 	int sum = 0; 

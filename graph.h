@@ -14,9 +14,9 @@ struct BTuple
 };
 
 //extra variable used for DFS traversal 
-static BTuple order_tmp[512];
-static BTuple order_vertex[512];
-static int vertex_degree[512];
+static BTuple order_tmp[2048];
+static BTuple order_vertex[2048];
+static int vertex_degree[2048];
 
 class graph
 {
@@ -263,7 +263,7 @@ static vector<graph> readGraphMemory(const char *db, int total)
 				//g.E[f][t] = l;
 				//g.E[t][f] = l;
 			}     // edge denoted by vertices and a label
-			if(g.crow != g.v-1) {
+			if(g.crow <= g.v-1) {
 					g.IA[g.crow+1]=g.IA[g.crow]+cre;
 					for(int j = g.crow+1; j<g.v; j++)
 					  	g.IA[j+1]=g.IA[j];
@@ -280,7 +280,7 @@ static vector<graph> readGraphMemory(const char *db, int total)
 		if (indata.eof()) indata.close();
 		return vg;
 	}
-	static void print_mat(graph g, char* output_file) 
+	static void print_mat(graph g, const char* output_file) 
        {
 	
 		ofstream fileout(output_file,ofstream::out);
