@@ -44,14 +44,14 @@ typedef unsigned int u32;
 typedef unsigned short u16;
 typedef unsigned char u8;
 
-static int INSERTED = 253;
-static int DELETED = 254;
-static int UNMAPPED = 255;
+static int INSERTED = 1021;  //253
+static int DELETED = 1022;  //254
+static int UNMAPPED = 1023; //255
 
 typedef struct verifyGraphNode
 {
-	u8 verifyGraphNodeID;
-	u8 verifyGraphNodeStr;
+	u16 verifyGraphNodeID;
+	u16 verifyGraphNodeStr;
 	verifyGraphNode(){}
 	verifyGraphNode(const verifyGraphNode &t)
 	{

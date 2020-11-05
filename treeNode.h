@@ -10,10 +10,10 @@ public:
 	int deep, ECost; //real cost and estimate cost
 	int CVLabel, CELabel;	
 	int *group, *cost;
-	u8 *matching, *inverseMatching;
-	u8 *degree1, *degree2;
-	u8 *lv1, *lv2;
-	u8 *le1, *le2;
+	u16 *matching, *inverseMatching;
+	u16 *degree1, *degree2;
+	u16 *lv1, *lv2;
+	u16 *le1, *le2;
 	bool visited; // 
 	vector<treeNode *> childs;
 
@@ -40,19 +40,19 @@ public:
 		if (this != &tn)
 		{			
 			this->uG1 = tn.uG1; this->uG2 = tn.uG2;
-			matching = new u8[uG1.gs]; memcpy(matching, tn.matching, sizeof(u8) * uG1.gs);
-			inverseMatching = new u8[uG2.gs];
-			memcpy(inverseMatching, tn.inverseMatching, sizeof(u8) * uG2.gs);
+			matching = new u16[uG1.gs]; memcpy(matching, tn.matching, sizeof(u16) * uG1.gs);
+			inverseMatching = new u16[uG2.gs];
+			memcpy(inverseMatching, tn.inverseMatching, sizeof(u16) * uG2.gs);
 
-			this->lv1 = new u8[max_v_1]; memcpy(lv1, tn.lv1, max_v_1);
-			this->lv2 = new u8[max_v_2]; memcpy(lv2, tn.lv2, max_v_2);
-			this->le1 = new u8[max_e_1]; memcpy(le1, tn.le1, max_e_1);
-			this->le2 = new u8[max_e_2]; memcpy(le2, tn.le2, max_e_2);
+			this->lv1 = new u16[max_v_1]; memcpy(lv1, tn.lv1, max_v_1);
+			this->lv2 = new u16[max_v_2]; memcpy(lv2, tn.lv2, max_v_2);
+			this->le1 = new u16[max_e_1]; memcpy(le1, tn.le1, max_e_1);
+			this->le2 = new u16[max_e_2]; memcpy(le2, tn.le2, max_e_2);
 			this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
             //cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
-			this->degree1 = new u8[static_cast<std::size_t>(uG1.gs)]; 
+			this->degree1 = new u16[static_cast<std::size_t>(uG1.gs)]; 
 			//cout<<"size of degree1 = "<<sizeof(this->degree1)<<" value of uG1.gs = "<<uG1.gs<<endl;
-			this->degree2 = new u8[uG2.gs];
+			this->degree2 = new u16[uG2.gs];
 
 			#if 1 //here: ? 
 			if (VERTEXFLAG1)
@@ -141,7 +141,7 @@ public:
 			return true;
 		return false;
 	}
-	inline int getNumberOfAdjacentverifyGraphEdges(u8 * &m, vector<vector<int > > &adjList, int i)
+	inline int getNumberOfAdjacentverifyGraphEdges(u16 * &m, vector<vector<int > > &adjList, int i)
 	{
 		int e = 0;
 		for (int j = 0; j < adjList[i].size(); j++)
@@ -179,7 +179,7 @@ public:
 		}
 		return tmp_cost;
 	}
-	inline void updateVertexDegree(vector<vector<int > > &adjList, u8 *degree, int &pos)
+	inline void updateVertexDegree(vector<vector<int > > &adjList, u16 *degree, int &pos)
 	{
 		if (pos == DELETED) return;
 		for (int i = 0; i < adjList[pos].size(); i++)
@@ -199,8 +199,8 @@ public:
 	}
 public:
 	void init(graph &g1, graph &g2);	
-	int  computeCVL(u8 *lv1, int li, u8 *lv2, int lj);
-	void updateCVL(u8 *lv1, int li, u8 *lv2, int lj, int &cvl);
+	int  computeCVL(u16 *lv1, int li, u16 *lv2, int lj);
+	void updateCVL(u16 *lv1, int li, u16 *lv2, int lj, int &cvl);
 	int  computeCEL(int &start, int &end, int &e1, int &e2);
 	void updateCEL(int &start, int &end, int &e1, int &e2, int &cel);
 	int  degree_distance_1(int &le1, int &le2, int &v1, int &v2, int &startIndex, int &endIndex,

@@ -3,8 +3,8 @@
 
 void treeNode::init(graph &g1, graph &g2)
 {
-	uG1.init(g1); degree1 = new u8[uG1.gs]; g1.degreeSet(degree1, max_d_1); max_d_1++;
-	uG2.init(g2); degree2 = new u8[uG2.gs]; g2.degreeSet(degree2, max_d_2); max_d_2++;
+	uG1.init(g1); degree1 = new u16[uG1.gs]; g1.degreeSet(degree1, max_d_1); max_d_1++;
+	uG2.init(g2); degree2 = new u16[uG2.gs]; g2.degreeSet(degree2, max_d_2); max_d_2++;
 	memset(a1, 0xff, 2048 * 2048); memset(a2, 0xff, 2048 * 2048);
 	adjList1.clear(); adjList2.clear();
 	max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
@@ -62,10 +62,10 @@ void treeNode::init(graph &g1, graph &g2)
 		adjList2.push_back(tmp);
 	}
 	max_v_2++; max_e_2++;
-	lv1 = new u8[max_v_1]; memset(lv1, 0, max_v_1);
-	lv2 = new u8[max_v_2]; memset(lv2, 0, max_v_2);
-	le1 = new u8[max_e_1]; memset(le1, 0, max_e_1);
-	le2 = new u8[max_e_2]; memset(le2, 0, max_e_2);
+	lv1 = new u16[max_v_1]; memset(lv1, 0, max_v_1);
+	lv2 = new u16[max_v_2]; memset(lv2, 0, max_v_2);
+	le1 = new u16[max_e_1]; memset(le1, 0, max_e_1);
+	le2 = new u16[max_e_2]; memset(le2, 0, max_e_2);
 	int size, to;
 
 	for (int i = 0; i < uG1.gs; i++)
@@ -91,10 +91,10 @@ void treeNode::init(graph &g1, graph &g2)
 		}
 	}
 
-	this->matching = new u8[uG1.gs];
-	memset(matching, 0xff, uG1.gs * sizeof(u8));
-	this->inverseMatching = new u8[uG2.gs];
-	memset(inverseMatching, 0xff, uG2.gs * sizeof(u8));
+	this->matching = new u16[uG1.gs];
+	memset(matching, 0xff, uG1.gs * sizeof(u16));
+	this->inverseMatching = new u16[uG2.gs];
+	memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
 	this->cost = new int[uG1.gs];
 	memset(cost, 0, uG1.gs * sizeof(int));
 
@@ -106,7 +106,7 @@ void treeNode::init(graph &g1, graph &g2)
 	this->cost[0] = this->deep + this->ECost;
 
 }
-int treeNode::computeCVL(u8 *lv1, int li, u8 *lv2, int lj)
+int treeNode::computeCVL(u16 *lv1, int li, u16 *lv2, int lj)
 {
 	int before_CVL = this->CVLabel;
 	int fj1 = lv1[li], fj2 = li < max_v_2 ? lv2[li] : 0;
@@ -140,7 +140,7 @@ int treeNode::computeCVL(u8 *lv1, int li, u8 *lv2, int lj)
 	}
 	return before_CVL;
 }
-void treeNode::updateCVL(u8 *lv1, int li, u8 *lv2, int lj, int &cvl)
+void treeNode::updateCVL(u16 *lv1, int li, u16 *lv2, int lj, int &cvl)
 {
 	this->CVLabel = cvl;
 	if (lj == DELETED)
@@ -157,7 +157,7 @@ int treeNode::computeCEL(int &start, int &end, int &e1, int &e2)
 	int before_CEL = this->CELabel;
 	e1 = this->uG1.e, e2 = this->uG2.e;
 
-	memset(start_deleted, 0, sizeof(u8) * max_e_1);
+	memset(start_deleted, 0, sizeof(u16) * max_e_1);
 	int max_1 = -1, max_2 = -1;
 
 	for (int i = 0; i < adjList1[start].size(); i++)
@@ -173,7 +173,7 @@ int treeNode::computeCEL(int &start, int &end, int &e1, int &e2)
 	}
 	if (end != DELETED) //deleted vertex
 	{
-		memset(end_deleted, 0, sizeof(u8) * max_e_2);
+		memset(end_deleted, 0, sizeof(u16) * max_e_2);
 		for (int i = 0; i < adjList2[end].size(); i++)
 		{
 			int to = adjList2[end][i];
@@ -262,8 +262,8 @@ int treeNode::degree_distance_1(int &le1, int &le2, int &v1, int &v2, int &start
 	}
 	else
 	{
-		memset(tmpDegree1, 0, max_d_1 * sizeof(u8));
-		memset(tmpDegree2, 0, max_d_2 * sizeof(u8));
+		memset(tmpDegree1, 0, max_d_1 * sizeof(u16));
+		memset(tmpDegree2, 0, max_d_2 * sizeof(u16));
 		for (; i < this->uG1.gs; i++)
 		{
 			if (max1 < succ_degree_1[i])
@@ -321,8 +321,8 @@ int treeNode::edgeOutDistance(int &startIndex, int &endIndex, int &v1, int &v2,
 		if (!succ_degree_1[i] && mappedVertex != DELETED && !succ_degree_2[mappedVertex]) continue;
 		if (!succ_degree_1[i] && mappedVertex == DELETED) continue;
 
-		memset(edgeList1, 0, sizeof(u8) * max_e_1);
-		memset(edgeList2, 0, sizeof(u8) * max_e_2);
+		memset(edgeList1, 0, sizeof(u16) * max_e_1);
+		memset(edgeList2, 0, sizeof(u16) * max_e_2);
 		int maxe1 = -1, maxe2 = -1;
 		int e1 = 0, e2 = 0, sum = 0;
 		int size = adjList1[i].size();
@@ -397,8 +397,8 @@ int treeNode::labelEditDistance(int &startIndex, int &endIndex, int &cost, int &
 		return 0;
 	}	
 	//step 1: \tau \geq max{|V_q|, |V_g|} - |\Sigma_{V_g} \cap \Sigma_{V_q}| + \delta(\sigma_g, \sigma_q)
-	memcpy(succ_degree_1, this->degree1, sizeof(u8) * this->uG1.gs);
-	memcpy(succ_degree_2, this->degree2, sizeof(u8) * this->uG2.gs);
+	memcpy(succ_degree_1, this->degree1, sizeof(u16) * this->uG1.gs);
+	memcpy(succ_degree_2, this->degree2, sizeof(u16) * this->uG2.gs);
 	this->updateVertexDegree(adjList1, succ_degree_1, startIndex);
 	this->updateVertexDegree(adjList2, succ_degree_2, endIndex);
 	if (endIndex == DELETED)
@@ -553,8 +553,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->updateCVL(tn->lv1, start.verifyGraphNodeStr, tn->lv2, end.verifyGraphNodeStr, cvl); //lv1, lv2				
 				tn->updateCEL(startIndex, endIndex, e1, e2, cel); //le1, le2
 
-				memcpy(tn->degree1, succ_degree_1, sizeof(u8) * uG1.gs); //degree1
-				memcpy(tn->degree2, succ_degree_2, sizeof(u8) * uG2.gs); //degree2
+				memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
+				memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				tn->cost[startIndex] = tn->deep + tn->ECost;
@@ -595,8 +595,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->updateCVL(tn->lv1, deleted.verifyGraphNodeStr, tn->lv2, DELETED, cvl); //lv1, lv2				
 				tn->updateCEL (i, DELETED, e1, e2, cel); //le1, le2
 
-				memcpy(tn->degree1, succ_degree_1, sizeof(u8) * uG1.gs); //degree1
-				memcpy(tn->degree2, succ_degree_2, sizeof(u8) * uG2.gs); //degree2
+				memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
+				memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				tn->cost[i] = tn->deep + tn->ECost;

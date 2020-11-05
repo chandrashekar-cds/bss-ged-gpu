@@ -45,7 +45,7 @@ map<int, int> graph::edgeLabel(int &max_edge)
 	}
 	return mel;
 }
-void graph::vertexDegree(int &vertex, u8 &degree)
+void graph::vertexDegree(int &vertex, u16 &degree)
 {
 	degree = 0;
 	for (int i = 0; i < this->v; i++)

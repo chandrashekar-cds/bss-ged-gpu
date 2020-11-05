@@ -11,23 +11,23 @@ extern vector<vector<int > > adjList1(0, vector<int>());
 extern vector<vector<int > > adjList2(0, vector<int>());
 extern verifyGraphNode gn1[2048] = { verifyGraphNode() };
 extern verifyGraphNode gn2[2048] = { verifyGraphNode() };
-extern u8 a1[2048][2048] = {0}; //
-extern u8 a2[2048][2048] = {0};
+extern u16 a1[2048][2048] = {0}; //
+extern u16 a2[2048][2048] = {0};
 extern vector<int> vs1(0, 0);
 extern vector<int> vs2(0, 0);
 extern vector<int> group1(0, 0);
 extern vector<int> group2(0, 0);
 
-extern u8 start_deleted[256] = {0};
-extern u8 end_deleted[256] = {0};
-extern u8 tmpDegree1[256] ={0};
-extern u8 tmpDegree2[256] = {0};
-extern u8 edgeList1[256] = {0};
-extern u8 edgeList2[256] = {0};
-extern u8 edge_set_1[2048] = {0};
-extern u8 edge_set_2[2048] = {0};
-extern u8 succ_degree_1[2048] = {0};
-extern u8 succ_degree_2[2048] = {0};
+extern u16 start_deleted[256] = {0};
+extern u16 end_deleted[256] = {0};
+extern u16 tmpDegree1[256] ={0};
+extern u16 tmpDegree2[256] = {0};
+extern u16 edgeList1[256] = {0};
+extern u16 edgeList2[256] = {0};
+extern u16 edge_set_1[2048] = {0};
+extern u16 edge_set_2[2048] = {0};
+extern u16 succ_degree_1[2048] = {0};
+extern u16 succ_degree_2[2048] = {0};
 extern int ds1[2048] = {0};
 extern int ds2[2048] = {0};
 

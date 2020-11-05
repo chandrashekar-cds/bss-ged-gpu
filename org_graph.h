@@ -197,7 +197,7 @@ public:
 public:
 	map<int, int> vertexLabel(int &max_vertex);
 	map<int, int> edgeLabel(int &max_edge);
-	void vertexDegree(int &vertex, u8 &degree);
+	void vertexDegree(int &vertex, u16 &degree);
 	void vertexDegree(int &vertex, int &degree);
 	void editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assignment, int &value);
 	inline void degreeSet(int* vd, int &max_d)
@@ -210,7 +210,7 @@ public:
 				max_d = vd[i];
 		}
 	}
-	inline void degreeSet(u8 *vd, int &max_d)
+	inline void degreeSet(u16 *vd, int &max_d)
 	{
 		max_d = 0;
 		for (int i = 0; i < this->v; i++)

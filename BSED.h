@@ -252,6 +252,7 @@ public:
 	{
 		int T = bound + 1, ged = bound + 1;
 		int count = 0, l = 0;
+		double elapsed_secs;
 		treeNode *start = new treeNode();
 		start->init(ga, gb);
 		int tmp_wdith = w;
@@ -267,7 +268,12 @@ public:
 		while (!bs.empty())
 		{
 			//if (!flag) { w = 500; flag = !flag; }
-			BeamSearchOnce(l, ged, group_1, group_2);
+			clock_t begin = clock();
+                            BeamSearchOnce(l, ged, group_1, group_2);
+            clock_t end = clock();
+            elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+            cout<<" BeamSearchOnce:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+			
 			while (!bs.empty() && bs.top().upper >= ged)
 			{
 				bs.pop();
@@ -297,9 +303,9 @@ public:
 	inline int getEditDistance(graph &g1, graph &g2, int bound)
 	{
 
-		u8 lv_1[256], lv_2[256], le_1[64], le_2[64];
-		memset(lv_1, 0, 256 * sizeof(u8)); memset(lv_2, 0, 256 * sizeof(u8));
-		memset(le_1, 0, 64 * sizeof(u8)); memset(le_2, 0, 64 * sizeof(u8));
+		u16 lv_1[256], lv_2[256], le_1[64], le_2[64];
+		memset(lv_1, 0, 256 * sizeof(u16)); memset(lv_2, 0, 256 * sizeof(u16));
+		memset(le_1, 0, 64 * sizeof(u16)); memset(le_2, 0, 64 * sizeof(u16));
 		cout<<"Hi..inside get-edit-dist "<<endl;
 		max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 
@@ -354,8 +360,8 @@ public:
 		g1.degreeSet(degree_1, max_d_1); max_d_1++;
 		g2.degreeSet(degree_2, max_d_2); max_d_2++;
 		cout<<"entering memset"<<endl;
-		//memset(tmpDegree1, 0, max_d_1 * sizeof(u8));
-		//memset(tmpDegree2, 0, max_d_2 * sizeof(u8));
+		//memset(tmpDegree1, 0, max_d_1 * sizeof(u16));
+		//memset(tmpDegree2, 0, max_d_2 * sizeof(u16));
 		cout<<"memset done"<<endl;
 		int i = 0, max1 = 0, max2 = 0, size1 = 0, size2 = 0, ie = 0, de = 0,
 			edge1 = g1.e, edge2 = g2.e;
