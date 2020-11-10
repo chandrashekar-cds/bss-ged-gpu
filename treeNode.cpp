@@ -504,6 +504,7 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 	{
 		this->uG2.undealVertexSets(vs2);
 		int rankj = uG1.gs - uG1.v;
+		//cout<<"rankj = "<<rankj<<endl;
 		#if 1
 		 	if (VERTEXFLAG2) memset(groupFlag2, 0, sizeof(bool) * this->uG2.gs);
 		 #endif
@@ -548,6 +549,7 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				#endif
 				tn->matching[startIndex] = endIndex;
 				tn->inverseMatching[endIndex] = startIndex;
+				//cout<<"rankj = "<<rankj<<endl;
 				tn->uG1.remove(start, gn1, rankj);
 				tn->uG2.remove(end, gn2, vs2[ranki]);
 				tn->updateCVL(tn->lv1, start.verifyGraphNodeStr, tn->lv2, end.verifyGraphNodeStr, cvl); //lv1, lv2				

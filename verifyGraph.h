@@ -15,7 +15,7 @@ public:
 	int e;
 	int len;	
 	bool *flag;
-	u64 unMappedVertex[8];
+	u64 unMappedVertex[16];
 
 public:
 	verifyGraph(graph &g)
@@ -73,6 +73,7 @@ public:
 	}
 	void remove(verifyGraphNode &node, verifyGraphNode *gn, const int &pos)
 	{
+		//cout<<"pos = "<<pos<<".. this->gs = "<<this->gs<<endl;
 		assert(pos >= 0 && pos < this->gs && this->flag && !flag[pos]);
 		node = gn[pos];
 		this->flag[pos] = true;
