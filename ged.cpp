@@ -1,4 +1,6 @@
 #include "BSED.h"
+#include <omp.h>
+
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +15,8 @@ int main(int argc, char *argv[])
 
 	const char *db_out = sorted ? "./ged_db" : db.c_str(); 
 	const char *query_out = sorted ? "./ged_query" : query.c_str();
+    
+	omp_set_num_threads(8); 
 
 	if(sorted){
 			graph::reOrderGraphs(db.c_str(), db_out, totalGraph);

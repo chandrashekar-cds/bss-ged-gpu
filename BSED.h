@@ -2,6 +2,7 @@
 #define _BSED_H
 #include "stdafx.h"
 #include "treeNode.h"
+#include <omp.h>
 
 typedef treeNode * PNode;
 struct cmpPNode
@@ -246,7 +247,9 @@ public:
 			closed[l] = PQL;
 			bs.push(beamItem(-1, bound, NULL, NULL));
 		}
+
 	}
+
 	int getEditDistance(graph &ga, graph &gb, int bound, vector<int> &group_1, vector<int> &group_2)
 
 	{
@@ -265,15 +268,20 @@ public:
 		startPQL.push(start);
 		closed[0] = startPQL;
 
-		while (!bs.empty())
+       #pragma omp parallel 
+	   {
+		   #pragma omp single
+		while (!(bs.empty() || flag))
 		{
 			//if (!flag) { w = 500; flag = !flag; }
+			//#pragma omp task
+			{
 			clock_t begin = clock();
-                            BeamSearchOnce(l, ged, group_1, group_2);
+                    BeamSearchOnce(l, ged, group_1, group_2);
             clock_t end = clock();
             elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
             cout<<" BeamSearchOnce:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
-			
+		    }
 			while (!bs.empty() && bs.top().upper >= ged)
 			{
 				bs.pop();
@@ -281,9 +289,12 @@ public:
 			}
 			if (bs.empty())
 			{
-				if (start) freeNode(start);
+				/*if (start) freeNode(start);
 				if (T == ged) return -1;
-				else return ged;
+				else return ged;*/
+				//#pragma omp atomic update
+					flag = true;
+				continue;
 			}
 			bs.top().lower = bs.top().upper; bs.top().upper = ged; //
 			bs.top().left = bs.top().right; bs.top().right = NULL;
@@ -294,7 +305,8 @@ public:
 				w = tmp_wdith;
 			}
 #endif
-		}
+		} // end of WHILE
+	   } // end of parallel region
 		if (start) freeNode(start);
 		if (T == ged) return -1;
 		else return ged;
