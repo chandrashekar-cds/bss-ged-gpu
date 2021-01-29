@@ -9,18 +9,24 @@ search paradigm, combined with two specially designed heuristics to improve the 
    1. download (or clone) the source code from https://github.com/chandrashekar-cds/bss-ged-gpu
    2. Compile the source code. 
 ### Step II. run BSS_GED
-   1. run the shell command: "./ged database n query m bound w", where    
+   1. run the shell command: "./ged database n query m bound w t h", where    
        (1) database is the graph database.       
        (2) n is the number of graphs in the database.        
        (3) query is the set of query graphs. 
        (4) m is the number of graphs in the query.     
        (5) bound is the GED threshold. Specifically, bound = -1 means that we perform the exact 
            GED computation; and otherwise, we perform the threshold-based graph similarity search.        
-       (6) w is the beam width.        
-       
+       (6) w is the beam width.      
+       (7) t is the no of threads
+       (8) h is the heuristic value     
+      
 ---------------------------------------------------------------------------------------------------------------------------
 Test-case
 
-./ged trial.data 5 1 tryquery.data 2 -1 10
+Original - ./ged trial.data 5 tryquery.data 2 -1 10
+
+After some additions and modifications
+
+./ged graph400v.txt 1 test400v.txt  1 -1 10 1 2
 
 ---------------------------------------------------------------------------------------------------------------------------
