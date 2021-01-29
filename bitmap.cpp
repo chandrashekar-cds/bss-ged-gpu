@@ -25,7 +25,7 @@ bitmap::bitmap()
 	}
 }
 void bitmap::getVertexSet(vector<int> &vs, int &count, u16 &idx, int offset)
-{
+{//what exactly does this function do?
 	int size = this->bmap[idx].vs.size();
 	for (int i = 0; i < size; i++)
 		vs[i + count] = this->bmap[idx].vs[i] + offset; // all non-zero entry

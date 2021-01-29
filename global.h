@@ -9,6 +9,8 @@ extern int max_v_2;
 extern int max_e_2;
 extern int max_d_1;
 extern int max_d_2;
+extern int MAX_THREADS;
+extern int h;
 
 extern vector<vector<int > > adjList1;
 extern vector<vector<int > > adjList2;
@@ -16,15 +18,17 @@ extern verifyGraphNode gn1[2048];
 extern verifyGraphNode gn2[2048];
 extern u16 a1[2048][2048]; //
 extern u16 a2[2048][2048];
-extern vector<int> vs1;
-extern vector<int> vs2;
-extern vector<int> group1;
+extern vector<int> vs1; //size of vertices - set in undealVertexSet
+extern vector<int> vs2; //size of vertices 
+extern vector<int> group1; // size of vertices - set in divideGroup
 extern vector<int> group2;
 
 extern u16 start_deleted[256];
 extern u16 end_deleted[256];
-extern u16 tmpDegree1[256];
-extern u16 tmpDegree2[256];
+extern u16 tmpDegree1[2048];
+extern u16 tmpDegree2[2048];
+extern u16 Degree1[2048];
+extern u16 Degree2[2048];
 extern u16 edgeList1[256];
 extern u16 edgeList2[256];
 extern u16 edge_set_1[2048];

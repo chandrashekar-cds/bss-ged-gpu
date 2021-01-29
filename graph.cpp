@@ -55,8 +55,8 @@ void graph::vertexDegree(int &vertex, u16 &degree)
 			degree++;
 	}
 }
-void graph::vertexDegree(int &vertex, int &degree)
-{
+void graph::vertexDegree(int &vertex, int &degree) //computes degree of a vertex
+{ // modify this function keeping CSR format in mind
 	degree = 0;
 	for (int i = 0; i < this->v; i++)
 	{
@@ -71,7 +71,7 @@ void graph::editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assign
 	int VI, VD, VS, EI, ES, ED;  VI = VD = VS = EI = ES = ED = 0;
 	value = 0;
 	vector<int> matching; matching.resize(assignment.size(), 255);
-
+    //cout<<" assignment size ="<<assignment.size()<<endl;
 	for (int i = 0; i < assignment.size(); i++)
 	{
 		for (int j = 0; j < assignment.size(); j++)
@@ -133,7 +133,7 @@ void graph::editDistanceInduced(graph &g, graph &h, vector<vector<int > >&assign
 	value = EI + ED + ES + VD + VI + VS;
 }
 
-inline vector<BTuple> graph::neibhoor(int &id)
+inline vector<BTuple> graph::neibhoor(int &id) // computes and passes the neighbor info of a vertex
 {
 	vector<BTuple> vp;
 	for (int i = 0; i < this->v; i++)
@@ -146,7 +146,7 @@ inline vector<BTuple> graph::neibhoor(int &id)
 	return vp;
 }
 
-bool graph::equal(int &f, int &t)
+bool graph::equal(int &f, int &t) // whether 2 vertices belong to same equivalence class
 {
 	if (V[f] != V[t]) return false;
 	vector<BTuple > vf = neibhoor(f);
@@ -171,7 +171,7 @@ bool graph::equal(int &f, int &t)
 	return true;
 }
 
-bool inVector(vector<int> &vr, int value)
+bool inVector(vector<int> &vr, int value) // checking for presence of a vertex in a vector
 {
 	int size = vr.size();
 	for (int i = 0; i < size; i++)
@@ -181,7 +181,7 @@ bool inVector(vector<int> &vr, int value)
 	return false;
 }
 
-vector<BTuple> graph::equalSet()
+vector<BTuple> graph::equalSet()   //stores pairs of vertices which belong to same equivalence class
 {
 	vector<BTuple> tmp;
 	for (int i = 0; i < v; i++)
@@ -195,8 +195,8 @@ vector<BTuple> graph::equalSet()
 	return tmp;
 }
 
-void graph::mergeEqualSet(vector<BTuple> &vb, vector<vector<int> > &vertexEqual)
-{
+void graph::mergeEqualSet(vector<BTuple> &vb, vector<vector<int> > &vertexEqual) // returns a matrix of vectors with each row for one equivalence class
+{// upto E^2 computations?? need to minimize it..
 	vertexEqual.clear();
 	int size = vb.size();
 	if (!size) return;
@@ -224,11 +224,12 @@ u64  graph::divideGroup(vector<int> &vs, int &group_number)
 {
 	u64 s = 1;
 	vector<BTuple> vb = this->equalSet(); vector<vector<int> > vertexEqual;
-	this->mergeEqualSet(vb, vertexEqual);
+	this->mergeEqualSet(vb, vertexEqual); // obtained a matrix of equivalence class of vertices
 
 	vs.resize(v, -1); int idx = 0;
-	int ves = vertexEqual.size();
-	if (ves == 0)
+	int ves = vertexEqual.size(); //no of equivalence classes
+	cout<<" no of eq classes = "<<ves<<endl;
+	if (ves == 0) // no 2 vertices are in same class
 	{
 		group_number = 0;
 		for (int i = 0; i < v; i++)
@@ -237,19 +238,20 @@ u64  graph::divideGroup(vector<int> &vs, int &group_number)
 	}
 	for (int i = 0; i < ves; i++)
 	{
-		int size = vertexEqual[i].size();
+		int size = vertexEqual[i].size(); // size is the number of vertices in each group
+		cout<<"i = "<<i<<", size = "<<size<<endl;
 		for (int j = 0; j < size; j++)
 		{
 			vs[vertexEqual[i][j]] = idx;
 		}
-		idx++;
-		s = s * size;
+		idx++; //idx is the ID of Eq class.. each vertex is assigned this ID
+		s = s * size; // s > 1 implies there are groups with more than 1 vertices of same class
 	}
 	for (int i = 0; i < v; i++)
 	{
 		if (vs[i] == -1) vs[i] = idx++;
 	}
-	group_number = idx;
+	group_number = idx; // total number of eq classes
 	return s;
 }
 

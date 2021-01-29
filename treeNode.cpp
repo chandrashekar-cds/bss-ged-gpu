@@ -3,9 +3,12 @@
 
 void treeNode::init(graph &g1, graph &g2)
 {
-	uG1.init(g1); degree1 = new u16[uG1.gs]; g1.degreeSet(degree1, max_d_1); max_d_1++;
-	uG2.init(g2); degree2 = new u16[uG2.gs]; g2.degreeSet(degree2, max_d_2); max_d_2++;
-	memset(a1, 0xff, 1024 * 1024); memset(a2, 0xff, 1024 * 1024);
+	//MOD here
+	uG1.init(g1); //degree1 = new u16[uG1.gs]; 
+	g1.degreeSet(Degree1, max_d_1); max_d_1++;
+	uG2.init(g2); //degree2 = new u16[uG2.gs]; 
+	g2.degreeSet(Degree2, max_d_2); max_d_2++;
+	memset(a1, 0xff, 2048 * 2048); memset(a2, 0xff, 2048 * 2048);
 	adjList1.clear(); adjList2.clear();
 	max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 
@@ -397,8 +400,10 @@ int treeNode::labelEditDistance(int &startIndex, int &endIndex, int &cost, int &
 		return 0;
 	}	
 	//step 1: \tau \geq max{|V_q|, |V_g|} - |\Sigma_{V_g} \cap \Sigma_{V_q}| + \delta(\sigma_g, \sigma_q)
-	memcpy(succ_degree_1, this->degree1, sizeof(u16) * this->uG1.gs);
-	memcpy(succ_degree_2, this->degree2, sizeof(u16) * this->uG2.gs);
+ 
+ // MOD here
+	memcpy(succ_degree_1, Degree1, sizeof(u16) * this->uG1.gs);
+	memcpy(succ_degree_2, Degree2, sizeof(u16) * this->uG2.gs);
 	this->updateVertexDegree(adjList1, succ_degree_1, startIndex);
 	this->updateVertexDegree(adjList2, succ_degree_2, endIndex);
 	if (endIndex == DELETED)
@@ -457,9 +462,15 @@ int treeNode::labelEditDistance(int &startIndex, int &endIndex, int &cost, int &
 
 
 void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> &group_2)
-{
+{//bound is clear.. group1 & group2 -- vector of vertices with their classes
+
 	bool flag = false;
 	if (this->deep + this->ECost >= bound) return;
+
+    //cout<<"Inside gensucc"<<endl;
+
+	//cout<<"uG1.v =  "<<uG1.v<<" uG2.v = "<<uG2.v<<endl;
+    //cout<<"uG1.gs =  "<<uG1.gs<<" uG2.gs = "<<uG2.gs<<endl;
 
 	if (uG2.v == 0)
 	{
@@ -469,9 +480,9 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 		this->deep += uG1.v;
 		if (this->deep >= bound) return;
 
-		for (int j = 0; j < uG1.v; j++)
+    	for (int j = 0; j < uG1.v; j++)
 		{
-			int i = vs1[j];
+			int i = vs1[j]; //what does vs1 store?
 			e += this->getNumberOfAdjacentverifyGraphEdges(this->matching, adjList1, i);
 			this->matching[i] = DELETED; // -1 = deletion
 		}
@@ -503,32 +514,38 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 	else
 	{
 		this->uG2.undealVertexSets(vs2);
-		int rankj = uG1.gs - uG1.v;
-		//cout<<"rankj = "<<rankj<<endl;
+		int rankj = uG1.gs - uG1.v; // what does this rank info do?
+		//cout<<"vs1 = "<<vs1.size()<<endl;
+		//for(int k=0;k<vs2.size();k++)
+		//cout<<"uG2.v =  "<<uG2.v<<endl;
 		#if 1
 		 	if (VERTEXFLAG2) memset(groupFlag2, 0, sizeof(bool) * this->uG2.gs);
 		 #endif
-		for (int i = 0; i < uG2.v; i++) //the order of A star
-		{
+		for (int i = 0; i < uG2.v; i+=h) //i is the parameter I am working with for getting faster solutions
+		{                                 // original had i++
 			int ranki = i;
 			#if 1
 			int groupID1 = 0, groupID2 = -1;				
 			if (VERTEXFLAG2)
 			{
-				groupID2 = group_2[vs2[ranki]];
+				groupID2 = group_2[vs2[ranki]];           // ranki used here - which is nothing but i
 				if (groupFlag2[groupID2]) continue;
-				groupFlag2[groupID2] = true;
+				groupFlag2[groupID2] = true;              
 			}
 			if (VERTEXFLAG1)
 			{
 				groupID1 = group_1[rankj];
 				int tmp_gd = this->group[groupID1];
+				//cout<<"tmp_gd = "<<tmp_gd<<endl;
 				if (groupID2 < tmp_gd) continue; //here: must optimization with look ahead
 			}
 			#endif
-			verifyGraphNode start, end;
-			start = gn1[rankj], end = gn2[vs2[ranki]];
-			int cost = this->deep;
+			verifyGraphNode start, end;                 //vs2 - vector<int>
+			start = gn1[rankj], end = gn2[vs2[ranki]]; // what do these assignments mean?
+			int cost = this->deep;                     //get hold of these arrays - gn1, gn2, vs2
+			//cout<<" Initial cost = "<<cost<<endl;
+			//cout<<"Start = "<<start.verifyGraphNodeStr<<endl; 
+			//cout<<" end = "<<end.verifyGraphNodeStr<<endl;
 			if (start.verifyGraphNodeStr != end.verifyGraphNodeStr) // the verifyGraphNode subtitution
 				cost += 1; //substitution
 
@@ -554,9 +571,9 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->uG2.remove(end, gn2, vs2[ranki]);
 				tn->updateCVL(tn->lv1, start.verifyGraphNodeStr, tn->lv2, end.verifyGraphNodeStr, cvl); //lv1, lv2				
 				tn->updateCEL(startIndex, endIndex, e1, e2, cel); //le1, le2
-
-				memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
-				memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
+              // MOD here   
+				//memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
+				//memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				tn->cost[startIndex] = tn->deep + tn->ECost;
@@ -596,14 +613,14 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->uG1.remove(deleted, gn1, rankj);
 				tn->updateCVL(tn->lv1, deleted.verifyGraphNodeStr, tn->lv2, DELETED, cvl); //lv1, lv2				
 				tn->updateCEL (i, DELETED, e1, e2, cel); //le1, le2
-
-				memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
-				memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
+                //MOD here
+				//memcpy(tn->degree1, succ_degree_1, sizeof(u16) * uG1.gs); //degree1
+				//memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				tn->cost[i] = tn->deep + tn->ECost;
 				this->childs.push_back(tn);
 			}
 		}
-	}
+	}   //end of else
 }

@@ -1,4 +1,4 @@
 #include "stdafx.h"
 #include "BSED.h"
-extern PNode succ[10000] = { 0 };
+extern PNode succ[20000] = { 0 };
 

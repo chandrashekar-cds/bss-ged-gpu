@@ -61,6 +61,7 @@ public:
 		this->gs = this->v = g.v;
 		this->e = g.e; 
 		this->len = this->gs / 64 + (this->gs % 64 ? 1 : 0);
+		//cout<<"this->len = "<<this->len<<endl;
 		this->flag = new bool[this->gs]; 
 		memset(this->flag, 0, sizeof(bool) * this->gs);
 		memset(this->unMappedVertex, 0, sizeof(u64) * this->len);

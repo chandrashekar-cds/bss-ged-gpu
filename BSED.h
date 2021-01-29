@@ -13,8 +13,8 @@ struct cmpPNode
 	}
 };
 
-typedef priority_queue<PNode, vector<PNode >, cmpPNode > PQueue;
-extern PNode succ[10000];
+typedef priority_queue<PNode, vector<PNode >, cmpPNode > PQueue; // have a look at PQ definition of C++
+extern PNode succ[20000]; // do I need 20k?? each entry is a pointer to a treenode
 static int initFilter = 0;
 
 typedef struct beamItem
@@ -32,7 +32,7 @@ typedef struct beamItem
 class BSEditDistance
 {
 public:
-	vector<PQueue> closed;
+	vector<PQueue> closed; // is closed a vector of priority queues
 	stack<beamItem>  bs;
 	int w;
 	int ged;
@@ -181,6 +181,7 @@ public:
 			}
 			return;
 		}
+		
 		select(&succ[0], size, width);
 		for (; i < width; i++)
 		{
@@ -214,9 +215,10 @@ public:
 		}
 	}
 	void BeamSearchOnce(int &l, int &bound, vector<int> &group_1, vector<int> &group_2)
-	{
+	{// inputs l = yet to know, bound is clear.. group1 & group2 -- vector of vertices with their classes
 		PQueue PQL = closed[l], PQLL, nullPQL;
 		PNode node; int size;
+		double elapsed_secs=0;
 
 		while (!PQL.empty() || !PQLL.empty())
 		{
@@ -232,12 +234,17 @@ public:
 				}
 				if (!node->visited)
 				{
-					node->generateSuccessors(bound, group_1, group_2);
+					clock_t begin = clock();
+                    	node->generateSuccessors(bound, group_1, group_2);       //imp 
+            		clock_t end = clock();
+            		elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+            		//cout<<" generateSuccessors:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+					
 					node->visited = true;
 					totalExpandNode += node->childs.size();
-					//total_search_node += node->childs.size();
+					//cout<<" totalExpandNode - "<<totalExpandNode<<endl;
 				}
-				expandSuccNode(node->childs, succ, size);
+				expandSuccNode(node->childs, succ, size);                   // imp
 			}
 			pruneLayer(succ, PQLL, size);
 			PQL = PQLL; PQLL = nullPQL;
@@ -257,21 +264,22 @@ public:
 		int count = 0, l = 0;
 		double elapsed_secs;
 		treeNode *start = new treeNode();
-		start->init(ga, gb);
+		start->init(ga, gb);            // treeNode initialized with graphs
 		int tmp_wdith = w;
-		bool flag = false;
+		bool flg = false, flag = false;
 
 		PQueue startPQL;
 		closed.resize(max(ga.v, gb.v) + 2, startPQL);
 		bs.push(beamItem(-1, ged, NULL, NULL));
 
 		startPQL.push(start);
-		closed[0] = startPQL;
+		closed[0] = startPQL;  // initializing a vector of priority queue entries with startPQL
 
-       #pragma omp parallel 
+        
+       //#pragma omp parallel 
 	   {
-		   #pragma omp single
-		while (!(bs.empty() || flag))
+		   //#pragma omp single
+		while (!(bs.empty() || flg))
 		{
 			//if (!flag) { w = 500; flag = !flag; }
 			//#pragma omp task
@@ -280,7 +288,7 @@ public:
                     BeamSearchOnce(l, ged, group_1, group_2);
             clock_t end = clock();
             elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
-            cout<<" BeamSearchOnce:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+            //cout<<" BeamSearchOnce:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
 		    }
 			while (!bs.empty() && bs.top().upper >= ged)
 			{
@@ -293,7 +301,7 @@ public:
 				if (T == ged) return -1;
 				else return ged;*/
 				//#pragma omp atomic update
-					flag = true;
+					flg = true;
 				continue;
 			}
 			bs.top().lower = bs.top().upper; bs.top().upper = ged; //
@@ -316,11 +324,13 @@ public:
 	{
 
 		u16 lv_1[256], lv_2[256], le_1[64], le_2[64];
+		double elapsed_secs;
 		memset(lv_1, 0, 256 * sizeof(u16)); memset(lv_2, 0, 256 * sizeof(u16));
 		memset(le_1, 0, 64 * sizeof(u16)); memset(le_2, 0, 64 * sizeof(u16));
 		cout<<"Hi..inside get-edit-dist "<<endl;
 		max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 
+// try modifying this to fit for CSR representation
 		for (int i = 0; i < g1.v; i++)
 		{
 			for (int j = 0; j < g1.v; j++)
@@ -371,22 +381,22 @@ public:
 		int degree_1[2048], degree_2[2048];
 		g1.degreeSet(degree_1, max_d_1); max_d_1++;
 		g2.degreeSet(degree_2, max_d_2); max_d_2++;
-		cout<<"entering memset"<<endl;
+		//cout<<"entering memset"<<endl;
 		//memset(tmpDegree1, 0, max_d_1 * sizeof(u16));
 		//memset(tmpDegree2, 0, max_d_2 * sizeof(u16));
-		cout<<"memset done"<<endl;
+		//cout<<"memset done"<<endl;
 		int i = 0, max1 = 0, max2 = 0, size1 = 0, size2 = 0, ie = 0, de = 0,
 			edge1 = g1.e, edge2 = g2.e;
          cout<<"some initializations done"<<endl;
 		for (int i = 0; i < g1.v; i++)
 		{
-			if (max1 < degree_1[i])
+			if (max1 < degree_1[i])              // is this not a rework
 				max1 = degree_1[i];
 			tmpDegree1[degree_1[i]]++;
 		}
 		for (i = max1; i >= 0; i--)
 		{
-			int len = tmpDegree1[i]; //chongdu
+			int len = tmpDegree1[i]; //chongdu   // len - no of vertices of degree i
 			for (int l = 0; l < len; l++)
 				ds1[size1++] = i;
 		}
@@ -399,11 +409,18 @@ public:
 		for (i = max2; i >= 0; i--)
 		{
 			int len = tmpDegree2[i];
+			cout<<"no of degree "<<i<<" vertices = "<<len<<endl;
 			for (int l = 0; l < len; l++)
 				ds2[size2++] = i;
 		}
+
 		cout<<"4 for loops done..  "<<"size1 = "<<size1<<"size2 = "<<size2<<endl;
-		common::degreeEditDistance(ds1, size1, ds2, size2, ie, de);
+		clock_t begin = clock();
+                    common::degreeEditDistance(ds1, size1, ds2, size2, ie, de); //time this
+        clock_t end = clock();
+        elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+        cout<<" common::degreeEditDistance:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+		
 		cout<<" safely back from degree edit dist"<<endl;
 		int tmp = max(2 * ie + edge1 - edge2, 2 * de + edge2 - edge1);
 		cout<<"tmp = "<<tmp<<" ie = "<<ie<<" de = "<<de<<endl;
@@ -412,7 +429,7 @@ public:
 		lower_bound = max(g1.v, g2.v) - commonVertex + tmp;
 		cout<<"lower_bound = "<<lower_bound<<" bound = "<<bound<<endl;
 		if (lower_bound > bound) return -1;
-		else
+		else  //normal execution brings it here
 		{
 			initFilter++;
 			u64 s1, s2;
@@ -420,10 +437,25 @@ public:
 			if (FLAG)
 			{
 				group2.clear();
-				s2 = g2.divideGroup(group2, group2_number); //here ?
+				
+				clock_t begin = clock();
+                    s2 = g2.divideGroup(group2, group2_number); //here ?
+                clock_t end = clock();
+                elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+                cout<<" g2.divideGroup:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+			
 				FLAG = false;
 			}
-			group1.clear(); s1 = g1.divideGroup(group1, group2_number);
+			// time this dividegroup function... esp for larger graphs..
+			//s1 - product of the sizes of each eq class
+			//group_number = total number of Eq classes
+    		
+			clock_t begin = clock();
+                    group1.clear(); s1 = g1.divideGroup(group1, group2_number); // group1 - each vertex and its group..
+            clock_t end = clock();
+            elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+            cout<<" g1.divideGroup:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
+			
 			if (s1 > 1) VERTEXFLAG1 = true; else VERTEXFLAG1 = false;
 			if (s2 > 1) VERTEXFLAG2 = true; else VERTEXFLAG2 = false;
 			if (s1 < s2)

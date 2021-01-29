@@ -9,9 +9,10 @@ public:
 	verifyGraph uG1, uG2;	
 	int deep, ECost; //real cost and estimate cost
 	int CVLabel, CELabel;	
-	int *group, *cost;
-	u16 *matching, *inverseMatching;
-	u16 *degree1, *degree2;
+	int *group, *cost;                           // space reduction target
+	u16 *matching, *inverseMatching;             // space reduction target
+	//MOD here
+	//u16 *degree1, *degree2;                      // space reduction target
 	u16 *lv1, *lv2;
 	u16 *le1, *le2;
 	bool visited; // 
@@ -27,7 +28,8 @@ public:
 
 		lv1 = lv2 = 0;
 		le1 = le2 = 0;
-		degree1 = degree2 = 0;
+	// MOD here
+		//degree1 = degree2 = 0;
 		group = cost = 0;
 
 	}
@@ -49,10 +51,11 @@ public:
 			this->le1 = new u16[max_e_1]; memcpy(le1, tn.le1, max_e_1);
 			this->le2 = new u16[max_e_2]; memcpy(le2, tn.le2, max_e_2);
 			this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
-            //cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
-			this->degree1 = new u16[static_cast<std::size_t>(uG1.gs)]; 
+            //MOD here
+			//cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
+			//this->degree1 = new u16[static_cast<std::size_t>(uG1.gs)]; 
 			//cout<<"size of degree1 = "<<sizeof(this->degree1)<<" value of uG1.gs = "<<uG1.gs<<endl;
-			this->degree2 = new u16[uG2.gs];
+			//this->degree2 = new u16[uG2.gs];
 
 			#if 1 //here: ? 
 			if (VERTEXFLAG1)
@@ -111,6 +114,8 @@ public:
 		{
 			delete[] le2; le2 = 0;
 		}
+		//MOD here
+		/*
 		if (degree1)
 		{
 			delete[] degree1; degree1 = 0;
@@ -119,6 +124,7 @@ public:
 		{
 			delete[] degree2; degree2 = 0;
 		}
+		*/
 #if 1
 		if (group)
 		{
