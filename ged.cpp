@@ -3,7 +3,7 @@
 //extern int MAX_THREADS;
 int main(int argc, char *argv[])
 {
-	if(argc < 8) {cout << "database n query m bound w threads" << endl; exit(0);}
+	/*if(argc < 8) {cout << "database n query m bound w threads" << endl; exit(0);}
 	string db = argv[1]; 
 	int totalGraph =  atoi(argv[2]);
 	string query = argv[3];
@@ -13,7 +13,52 @@ int main(int argc, char *argv[])
         int thread = atoi(argv[7]);
 	const int sorted = 0;
         h = atoi(argv[8]);
-        
+        */
+	
+	string db ; 
+	int totalGraph =  1;
+	string query ;
+	int totalQuery = 1;
+	int ub = -1;
+	int width = 10;
+        int thread = 1;
+	const int sorted = 0;
+        h = 1;
+    
+
+	int cmd_flag;
+        while ((cmd_flag = getopt(argc, argv, "i:n:q:m:b:w:t:h:")) != -1) {
+        switch (cmd_flag) {
+            case 'i':
+                db.assign(optarg);
+                break;
+	    case 'n':
+                totalGraph = std::stoi(std::string(optarg));
+                break;
+            case 'q':
+                query.assign(optarg);
+                break;
+	    case 'm':
+                totalQuery = std::stoi(std::string(optarg));
+                break;
+            case 'b':
+                ub = std::stoi(std::string(optarg));
+                break;
+            case 'w':
+                width = std::stoi(std::string(optarg));
+                break;
+	    case 't':
+                thread = std::stoi(std::string(optarg));
+                break;
+ 	    case 'h':
+                h = std::stoi(std::string(optarg));
+                break;
+            default:
+                std::cerr << "main() : Invalid command line argument"
+                          << std::endl;
+            exit(1);
+        }
+    }
         omp_set_num_threads(thread); 
         MAX_THREADS = thread;
         cout<<"NO of THREADS  =  "<<omp_get_num_threads()<<endl;        
