@@ -17,7 +17,8 @@ typedef priority_queue<PNode, vector<PNode >, cmpPNode > PQueue; // have a look 
 extern PNode succ[20000]; // do I need 20k?? each entry is a pointer to a treenode
 static int initFilter = 0;
 
-typedef struct beamItem
+//typedef 
+struct beamItem
 {
 	PNode left, right;
 	int lower, upper;
@@ -409,7 +410,7 @@ public:
 		for (i = max2; i >= 0; i--)
 		{
 			int len = tmpDegree2[i];
-			cout<<"no of degree "<<i<<" vertices = "<<len<<endl;
+			//cout<<"no of degree "<<i<<" vertices = "<<len<<endl;
 			for (int l = 0; l < len; l++)
 				ds2[size2++] = i;
 		}
@@ -458,6 +459,8 @@ public:
 			
 			if (s1 > 1) VERTEXFLAG1 = true; else VERTEXFLAG1 = false;
 			if (s2 > 1) VERTEXFLAG2 = true; else VERTEXFLAG2 = false;
+			if(VERTEXFLAG1) cout<<"VERTEXFLAG1"<<endl;
+            if(VERTEXFLAG2) cout<<"VERTEXFLAG2"<<endl;
 			if (s1 < s2)
 			{
 				cout<<"s1 < s2"<<endl;

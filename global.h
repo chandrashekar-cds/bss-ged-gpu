@@ -12,6 +12,11 @@ extern int max_d_2;
 extern int MAX_THREADS;
 extern int h;
 
+typedef std::map<int, int> Dictmap;
+
+int mapfind(Dictmap mapping, int key, int defalt);
+void mapinsert(Dictmap mymap, int key, int value);
+
 extern vector<vector<int > > adjList1;
 extern vector<vector<int > > adjList2;
 extern verifyGraphNode gn1[2048];

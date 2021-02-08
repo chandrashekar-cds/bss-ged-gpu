@@ -3,7 +3,8 @@
 #define _BITMAP_H
 #include "stdafx.h"
 
-typedef struct vertexSet
+//typedef 
+struct vertexSet
 {
 	vector<int> vs;
 	vertexSet(){ vs.clear(); }

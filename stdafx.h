@@ -48,7 +48,8 @@ static int INSERTED = 1021;  //253
 static int DELETED = 1022;  //254
 static int UNMAPPED = 1023; //255
 
-typedef struct verifyGraphNode
+//typedef 
+struct verifyGraphNode
 {
 	u16 verifyGraphNodeID;
 	u16 verifyGraphNodeStr;

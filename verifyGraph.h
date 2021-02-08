@@ -15,7 +15,7 @@ public:
 	int e;
 	int len;	
 	bool *flag;
-	u64 unMappedVertex[16];
+	u64 unMappedVertex[32];
 
 public:
 	verifyGraph(graph &g)
