@@ -29,4 +29,7 @@ After some additions and modifications
 
 ./ged graph400v.txt 1 test400v.txt  1 -1 10 1 2
 
+After modifying the way arguments are accepted
+./ged -i graph200v.txt -n 1 -q test200v.txt -m 1 -b -1 -w 10 -t 1 -h 2
+
 ---------------------------------------------------------------------------------------------------------------------------
