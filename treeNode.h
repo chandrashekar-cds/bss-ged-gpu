@@ -9,7 +9,9 @@ public:
 	verifyGraph uG1, uG2;	
 	int deep, ECost; //real cost and estimate cost
 	int CVLabel, CELabel;	
-	int *group, *cost;                           // space reduction target
+	//int *group; 
+	Dictmap group;
+	int *cost;                           // space reduction target
 	u16 *matching, *inverseMatching;             // space reduction target
 	//MOD here
 	//u16 *degree1, *degree2;                      // space reduction target
@@ -30,7 +32,8 @@ public:
 		le1 = le2 = 0;
 	// MOD here
 		//degree1 = degree2 = 0;
-		group = cost = 0;
+		//group = 0;
+		cost = 0;
 
 	}
 	treeNode(const treeNode &tn) //deep copy
@@ -57,7 +60,7 @@ public:
 			//cout<<"size of degree1 = "<<sizeof(this->degree1)<<" value of uG1.gs = "<<uG1.gs<<endl;
 			//this->degree2 = new u16[uG2.gs];
 
-			#if 1 //here: ? 
+			/*#if 1 //here: ? 
 			if (VERTEXFLAG1)
 			{
 				this->group = new int[uG1.gs];
@@ -65,7 +68,7 @@ public:
 			}
 			else
 				this->group = 0;
-			#endif
+			#endif*/
 			this->visited = false;
 		}
 		return *this;
@@ -125,12 +128,12 @@ public:
 			delete[] degree2; degree2 = 0;
 		}
 		*/
-#if 1
+/*#if 1
 		if (group)
 		{
 			delete[] group; group = 0;
 		}
-#endif
+#endif*/
 		if (cost)
 		{
 			delete[] cost; cost = 0;

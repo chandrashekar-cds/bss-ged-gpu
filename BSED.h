@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "treeNode.h"
 #include <omp.h>
+#include "global.h"
 
 typedef treeNode * PNode;
 struct cmpPNode
@@ -240,10 +241,34 @@ public:
             		clock_t end = clock();
             		elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
             		//cout<<" generateSuccessors:"<<'\t'<<"Time taken(ms) = "<<elapsed_secs*1000<<endl;
-					
+					lvlcounter++;
 					node->visited = true;
 					totalExpandNode += node->childs.size();
+	                
+	                cout<<"###################################################################### "<<endl; 
+        	        cout<<"*****************Contents of nodes at level "<<lvlcounter<<"***********************"<<endl;	
+			        cout<<"###################################################################### "<<endl;
+					for(auto i = 0;i < node->childs.size(); i++)
+					{
+						
+						//Dictmapu16 myMap = node->childs[i]->matching;
+						//cout<<"Contents of matching map"<<endl;
+						//printmap(myMap);
+						//myMap = node->childs[i]->inverseMatching;
+						//cout<<"Contents of inverse matching map"<<endl;
+						//printmap(myMap);
+						Dictmap mymap = node->childs[i]->group;
+						cout<<"Contents of group map"<<endl;
+						printmap(mymap);
+						//mymap = node->childs[i]->cost;
+						//cout<<"Contents of cost map"<<endl;
+						//printmap(mymap);
+						cout<<"---------------------------------------------------------------------- "<<endl;
+
+					}
+					cout<<"---------------------------------------------------------------------- "<<endl;
 					//cout<<" totalExpandNode - "<<totalExpandNode<<endl;
+					
 				}
 				expandSuccNode(node->childs, succ, size);                   // imp
 			}
@@ -460,7 +485,7 @@ public:
 			if (s1 > 1) VERTEXFLAG1 = true; else VERTEXFLAG1 = false;
 			if (s2 > 1) VERTEXFLAG2 = true; else VERTEXFLAG2 = false;
 			if(VERTEXFLAG1) cout<<"VERTEXFLAG1"<<endl;
-            if(VERTEXFLAG2) cout<<"VERTEXFLAG2"<<endl;
+                        if(VERTEXFLAG2) cout<<"VERTEXFLAG2"<<endl;
 			if (s1 < s2)
 			{
 				cout<<"s1 < s2"<<endl;

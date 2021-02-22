@@ -8,21 +8,23 @@ int max_d_1 = 0;
 int max_d_2 = 0; 
 int MAX_THREADS = 0;
 int h = 0;
+int lvlcounter = 0;
+int memfootprint = 0;
 
 //typedef std::map<int, int> Dictmap;
-
-int mapfind(Dictmap mapping, int key, int defalt)
+/*template <typename T>
+int mapfind(T mapping, int key, int defalt)
 {
-    map<int, int>::iterator itr;
+    typename T::iterator itr;
     itr = mapping.find(key);
     //cout<<"itr = "<<itr<<endl;
     if (itr == mapping.end())  
         return defalt;
     else return itr->second;
-}
-void mapinsert(Dictmap mymap, int key, int value)
+}*/
+/*void mapinsert(T mymap, int key, int value)
 {
-    map<int, int>::iterator itr;	
+    typename T::iterator itr;	
     itr = mymap.find(key);
     if(itr == mymap.end()) 
         { 
@@ -30,13 +32,23 @@ void mapinsert(Dictmap mymap, int key, int value)
             //cout<<"new element inserted"<<endl;
         }
     else itr->second = value;
-   /*
-    std::pair<std::map<int,int>::iterator,bool> ret;
-    ret = mymap.insert ( std::pair<int,int>(key,value) );
-    if (ret.second==false) ret.first->second = value;
-   */
+   
+   // std::pair<std::map<int,int>::iterator,bool> ret;
+   // ret = mymap.insert ( std::pair<int,int>(key,value) );
+   // if (ret.second==false) ret.first->second = value;
+   
     return;
-}
+}*/
+/*template <typename T>
+void printmap(T myMap)
+{
+    typename T::iterator it;
+    for(auto it = myMap.begin(); it != myMap.end(); ++it)
+    {
+        std::cout << it->first << "\t" << it->second << "\n";
+        memfootprint += 2;
+    }
+}*/
 
 vector<vector<int > > adjList1(0, vector<int>());
 vector<vector<int > > adjList2(0, vector<int>());
@@ -61,6 +73,8 @@ u16 edge_set_1[2048] = {0};   //
 u16 edge_set_2[2048] = {0};
 u16 succ_degree_1[2048] = {0};    // max size - no of vertices
 u16 succ_degree_2[2048] = {0};
+
+int *Group;
 int ds1[2048] = {0};            // max size - no of vertices
 int ds2[2048] = {0};
 

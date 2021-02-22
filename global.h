@@ -2,6 +2,7 @@
 #define _GLOBAL_H
 #include "bitmap.h"
 #include "verifyGraph.h"
+#include "map"
 
 extern int max_v_1;
 extern int max_e_1;
@@ -11,11 +12,32 @@ extern int max_d_1;
 extern int max_d_2;
 extern int MAX_THREADS;
 extern int h;
+extern int lvlcounter;
+extern int memfootprint;
 
 typedef std::map<int, int> Dictmap;
+typedef std::map<u16, u16> Dictmapu16;
 
-int mapfind(Dictmap mapping, int key, int defalt);
-void mapinsert(Dictmap mymap, int key, int value);
+template <typename T> int mapfind(T mapping, int key, int defalt)
+{
+    typename T::iterator itr;
+    itr = mapping.find(key);
+    //cout<<"itr = "<<itr<<endl;
+    if (itr == mapping.end())  
+        return defalt;
+    else return itr->second;
+}
+//void mapinsert(T mymap, int key, int value);
+template <typename T>
+void printmap(T myMap)
+{
+    typename T::iterator it;
+    for(auto it = myMap.begin(); it != myMap.end(); ++it)
+    {
+        std::cout << it->first << "\t" << it->second << "\n";
+        memfootprint += 2;
+    }
+}
 
 extern vector<vector<int > > adjList1;
 extern vector<vector<int > > adjList2;
@@ -41,6 +63,7 @@ extern u16 edge_set_2[2048];
 extern u16 succ_degree_1[2048]; 
 extern u16 succ_degree_2[2048];
 
+extern int *Group;
 extern int ds1[2048];
 extern int ds2[2048];
 extern bool FLAG;

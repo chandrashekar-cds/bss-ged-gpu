@@ -12,12 +12,12 @@ void treeNode::init(graph &g1, graph &g2)
 	adjList1.clear(); adjList2.clear();
 	max_v_1 = max_v_2 = max_e_1 = max_e_2 = 0;
 
-	if (VERTEXFLAG1)
+	/*if (VERTEXFLAG1)
 	{
 		this->group = new int[uG1.gs];
 		for (int i = 0; i < uG1.gs; i++)
 			group[i] = -1;
-	}
+	}*/
 	for (int i = 0; i < g1.v; i++)
 	{
 		vector<int > tmp;
@@ -535,7 +535,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 			if (VERTEXFLAG1)
 			{
 				groupID1 = group_1[rankj];
-				int tmp_gd = this->group[groupID1];
+				//int tmp_gd = this->group[groupID1];
+                                  int tmp_gd = mapfind(this->group,groupID1,-1);
 				//cout<<"tmp_gd = "<<tmp_gd<<endl;
 				if (groupID2 < tmp_gd) continue; //here: must optimization with look ahead
 			}
