@@ -98,16 +98,16 @@ void treeNode::init(graph &g1, graph &g2)
 	memset(matching, 0xff, uG1.gs * sizeof(u16));
 	this->inverseMatching = new u16[uG2.gs];
 	memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
-	this->cost = new int[uG1.gs];
-	memset(cost, 0, uG1.gs * sizeof(int));
+	//this->cost = new int[uG1.gs];
+	//memset(cost, 0, uG1.gs * sizeof(int));
 
 	this->deep = 0;
 	this->CVLabel = common::initCommonLabel(this->lv1, this->lv2, max_v_1, max_v_2);
 	this->CELabel = common::initCommonLabel(this->le1, this->le2, max_e_1, max_e_2);
 	this->ECost = max(g1.v, g2.v) - this->CVLabel + max(g1.e, g2.e) - this->CELabel;
 	this->visited = false;
-	this->cost[0] = this->deep + this->ECost;
-
+	//this->cost[0] = this->deep + this->ECost;
+    cinsert(this->cost,0,this->deep + this->ECost);
 }
 int treeNode::computeCVL(u16 *lv1, int li, u16 *lv2, int lj)
 {
@@ -577,7 +577,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				//memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
-				tn->cost[startIndex] = tn->deep + tn->ECost;
+				//tn->cost[startIndex] = tn->deep + tn->ECost;
+				cinsert(tn->cost,startIndex,tn->deep + tn->ECost);
 				this->childs.push_back(tn);
 			}
 
@@ -619,7 +620,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				//memcpy(tn->degree2, succ_degree_2, sizeof(u16) * uG2.gs); //degree2
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
-				tn->cost[i] = tn->deep + tn->ECost;
+				//tn->cost[i] = tn->deep + tn->ECost;
+				cinsert(tn->cost,i,tn->deep + tn->ECost);
 				this->childs.push_back(tn);
 			}
 		}

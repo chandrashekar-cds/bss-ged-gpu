@@ -11,7 +11,8 @@ public:
 	int CVLabel, CELabel;	
 	//int *group; 
 	Dictmap group;
-	int *cost;                           // space reduction target
+	//int *cost;                           // space reduction target
+	std::vector<int>  cost;
 	u16 *matching, *inverseMatching;             // space reduction target
 	//MOD here
 	//u16 *degree1, *degree2;                      // space reduction target
@@ -33,7 +34,7 @@ public:
 	// MOD here
 		//degree1 = degree2 = 0;
 		//group = 0;
-		cost = 0;
+		//cost = 0;
 
 	}
 	treeNode(const treeNode &tn) //deep copy
@@ -53,8 +54,9 @@ public:
 			this->lv2 = new u16[max_v_2]; memcpy(lv2, tn.lv2, max_v_2);
 			this->le1 = new u16[max_e_1]; memcpy(le1, tn.le1, max_e_1);
 			this->le2 = new u16[max_e_2]; memcpy(le2, tn.le2, max_e_2);
-			this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
-            //MOD here
+			//this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
+            this->cost = tn.cost;
+			//MOD here
 			//cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
 			//this->degree1 = new u16[static_cast<std::size_t>(uG1.gs)]; 
 			//cout<<"size of degree1 = "<<sizeof(this->degree1)<<" value of uG1.gs = "<<uG1.gs<<endl;
@@ -134,10 +136,10 @@ public:
 			delete[] group; group = 0;
 		}
 #endif*/
-		if (cost)
+		/*if (cost)
 		{
 			delete[] cost; cost = 0;
-		}
+		}*/
 		if (childs.size() > 0)
 		{
 			vector<treeNode *>().swap(childs);

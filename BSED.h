@@ -244,7 +244,7 @@ public:
 					lvlcounter++;
 					node->visited = true;
 					totalExpandNode += node->childs.size();
-	                
+	                /*
 	                cout<<"###################################################################### "<<endl; 
         	        cout<<"*****************Contents of nodes at level "<<lvlcounter<<"***********************"<<endl;	
 			        cout<<"###################################################################### "<<endl;
@@ -268,7 +268,7 @@ public:
 					}
 					cout<<"---------------------------------------------------------------------- "<<endl;
 					//cout<<" totalExpandNode - "<<totalExpandNode<<endl;
-					
+					*/
 				}
 				expandSuccNode(node->childs, succ, size);                   // imp
 			}

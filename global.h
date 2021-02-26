@@ -2,7 +2,6 @@
 #define _GLOBAL_H
 #include "bitmap.h"
 #include "verifyGraph.h"
-#include "map"
 
 extern int max_v_1;
 extern int max_e_1;
@@ -39,6 +38,27 @@ void printmap(T myMap)
     }
 }
 
+
+auto mfind = [] (vector<u16> m, int i)->u16 { if (i < m.size()) 
+                                              return m[i];
+                                              else return 0; };
+
+auto minsert = [&] (vector<u16> &m, int ind, u16 val) {  if (ind >= m.size())
+                                                            m.resize(ind+1,0xff);
+                                                        m[ind] = val;    
+                                                    };
+
+auto cfind = [] (vector<int> m, int i) { if (i < m.size()) 
+                                              return m[i];
+                                              else return 0; };
+
+auto cinsert = [&] (vector<int> &m, int ind, int val) {  if (ind >= m.size())
+                                                            m.resize(ind+1,0);
+                                                        m[ind] = val;    
+                                                    };
+
+
+
 extern vector<vector<int > > adjList1;
 extern vector<vector<int > > adjList2;
 extern verifyGraphNode gn1[2048];
@@ -48,8 +68,7 @@ extern u16 a2[2048][2048];
 extern vector<int> vs1; //size of vertices - set in undealVertexSet
 extern vector<int> vs2; //size of vertices 
 extern vector<int> group1; // size of vertices - set in divideGroup
-extern vector<int> group2;
-
+extern vector<int> group2; // size of vertices - set in divideGroup
 extern u16 start_deleted[256];
 extern u16 end_deleted[256];
 extern u16 tmpDegree1[2048];
