@@ -12,8 +12,9 @@ public:
 	//int *group; 
 	Dictmap group;
 	//int *cost;                           // space reduction target
-	std::vector<int>  cost;
-	u16 *matching, *inverseMatching;             // space reduction target
+	//std::vector<int>  cost;
+	//u16 *matching, *inverseMatching;             // space reduction target
+	std::vector<u16> matching, inverseMatching;
 	//MOD here
 	//u16 *degree1, *degree2;                      // space reduction target
 	u16 *lv1, *lv2;
@@ -25,7 +26,7 @@ public:
 	treeNode()
 	{
 		this->ECost = this->deep = 0;
-		this->matching = this->inverseMatching = 0;
+		//this->matching = this->inverseMatching = 0;
 		this->CVLabel = this->CELabel = 0;
 		this->visited = false;
 
@@ -46,16 +47,18 @@ public:
 		if (this != &tn)
 		{			
 			this->uG1 = tn.uG1; this->uG2 = tn.uG2;
-			matching = new u16[uG1.gs]; memcpy(matching, tn.matching, sizeof(u16) * uG1.gs);
-			inverseMatching = new u16[uG2.gs];
-			memcpy(inverseMatching, tn.inverseMatching, sizeof(u16) * uG2.gs);
+			//matching = new u16[uG1.gs]; memcpy(matching, tn.matching, sizeof(u16) * uG1.gs);
+			//inverseMatching = new u16[uG2.gs];
+			//memcpy(inverseMatching, tn.inverseMatching, sizeof(u16) * uG2.gs);
+            this->matching = tn.matching;
+			this->inverseMatching = tn.inverseMatching;
 
 			this->lv1 = new u16[max_v_1]; memcpy(lv1, tn.lv1, max_v_1);
 			this->lv2 = new u16[max_v_2]; memcpy(lv2, tn.lv2, max_v_2);
 			this->le1 = new u16[max_e_1]; memcpy(le1, tn.le1, max_e_1);
 			this->le2 = new u16[max_e_2]; memcpy(le2, tn.le2, max_e_2);
 			//this->cost = new int[uG1.gs]; memcpy(this->cost, tn.cost, sizeof(int) * uG1.gs);
-            this->cost = tn.cost;
+         //   this->cost = tn.cost;
 			//MOD here
 			//cout<<"size of le2 = "<<sizeof(this->le2)<<" value of max_e_2 = "<<max_e_2<<endl;
 			//this->degree1 = new u16[static_cast<std::size_t>(uG1.gs)]; 
@@ -95,14 +98,14 @@ public:
 
 	~treeNode()
 	{
-		if (matching)
+		/*if (matching)
 		{
 			delete[]matching; matching = 0;
 		}
 		if (inverseMatching)
 		{
 			delete[] inverseMatching; inverseMatching = 0;
-		}
+		}*/
 		if (lv1)
 		{
 			delete[] lv1; lv1 = 0;
@@ -152,13 +155,13 @@ public:
 			return true;
 		return false;
 	}
-	inline int getNumberOfAdjacentverifyGraphEdges(u16 * &m, vector<vector<int > > &adjList, int i)
+	inline int getNumberOfAdjacentverifyGraphEdges(vector<u16>  &m, vector<vector<int > > &adjList, int i)
 	{
 		int e = 0;
 		for (int j = 0; j < adjList[i].size(); j++)
 		{
 			int idx = adjList[i][j];
-			if (m[idx] != UNMAPPED) e += 1;
+			if (mfind(m,idx) != UNMAPPED) e += 1;
 		}
 		return e;
 	}

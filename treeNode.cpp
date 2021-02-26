@@ -94,10 +94,10 @@ void treeNode::init(graph &g1, graph &g2)
 		}
 	}
 
-	this->matching = new u16[uG1.gs];
-	memset(matching, 0xff, uG1.gs * sizeof(u16));
-	this->inverseMatching = new u16[uG2.gs];
-	memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
+	//this->matching = new u16[uG1.gs];
+	//memset(matching, 0xff, uG1.gs * sizeof(u16));
+	//this->inverseMatching = new u16[uG2.gs];
+	//memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
 	//this->cost = new int[uG1.gs];
 	//memset(cost, 0, uG1.gs * sizeof(int));
 
@@ -107,7 +107,7 @@ void treeNode::init(graph &g1, graph &g2)
 	this->ECost = max(g1.v, g2.v) - this->CVLabel + max(g1.e, g2.e) - this->CELabel;
 	this->visited = false;
 	//this->cost[0] = this->deep + this->ECost;
-    cinsert(this->cost,0,this->deep + this->ECost);
+    //cinsert(this->cost,0,this->deep + this->ECost);
 }
 int treeNode::computeCVL(u16 *lv1, int li, u16 *lv2, int lj)
 {
@@ -248,16 +248,18 @@ int treeNode::degree_distance_1(int &le1, int &le2, int &v1, int &v2, int &start
 	vector<int> &vs, int ranki)
 {
 	int dis = 0, i = 0, size1 = 0, max1 = 0, size2 = 0, max2 = 0, sum = 0, to, mappedVertex;
-	this->matching[startIndex] = endIndex;
+	//this->matching[startIndex] = endIndex;
+	minsert(this->matching,startIndex,endIndex);
 	for (i = 0; i <= startIndex; i++) //defult order: [0, ..., i]
 	{
-		mappedVertex = this->matching[i];
+		//mappedVertex = this->matching[i];
+		mappedVertex = mfind(this->matching,i);
 		if (mappedVertex == DELETED) dis += succ_degree_1[i];
 		else
 			dis += abs(succ_degree_1[i] - succ_degree_2[mappedVertex]);
 	}
-	this->matching[startIndex] = UNMAPPED;
-
+	//this->matching[startIndex] = UNMAPPED;
+    minsert(this->matching,startIndex,UNMAPPED);
 	if (v1 == 0 || v2 == 0)
 	{
 		le1 = le2 = 0;
@@ -311,7 +313,8 @@ int treeNode::edgeOutDistance(int &startIndex, int &endIndex, int &v1, int &v2,
 
 	memset(unionFlag1, 0, sizeof(bool) * this->uG1.gs);
 	memset(unionFlag2, 0, sizeof(bool) * this->uG2.gs);
-	this->matching[startIndex] = endIndex;
+	//this->matching[startIndex] = endIndex;
+	minsert(this->matching,startIndex,endIndex);
 	this->uG1.flag[startIndex] = true;
 	if (endIndex != DELETED)
 	{
@@ -320,7 +323,8 @@ int treeNode::edgeOutDistance(int &startIndex, int &endIndex, int &v1, int &v2,
 
 	for (; i <= startIndex; i++)
 	{
-		mappedVertex = this->matching[i];
+		//mappedVertex = this->matching[i];
+		mappedVertex = mfind(this->matching,i);
 		if (!succ_degree_1[i] && mappedVertex != DELETED && !succ_degree_2[mappedVertex]) continue;
 		if (!succ_degree_1[i] && mappedVertex == DELETED) continue;
 
@@ -377,7 +381,8 @@ int treeNode::edgeOutDistance(int &startIndex, int &endIndex, int &v1, int &v2,
 		NB = max(NB, ie - de);
 	}
 
-	this->matching[startIndex] = UNMAPPED;
+	//this->matching[startIndex] = UNMAPPED;
+	minsert(this->matching,startIndex,UNMAPPED);
 	this->uG1.flag[startIndex] = false;
 	if (endIndex != DELETED)
 	{
@@ -484,7 +489,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 		{
 			int i = vs1[j]; //what does vs1 store?
 			e += this->getNumberOfAdjacentverifyGraphEdges(this->matching, adjList1, i);
-			this->matching[i] = DELETED; // -1 = deletion
+			//this->matching[i] = DELETED; // -1 = deletion
+			minsert(this->matching,i, DELETED);
 		}
 		this->deep += e;
 		if (this->deep < bound)
@@ -503,7 +509,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 		{
 			int i = vs2[j];
 			e += this->getNumberOfAdjacentverifyGraphEdges(this->inverseMatching, adjList2, i);
-			this->inverseMatching[i] = INSERTED; // -2 = insertion
+			//this->inverseMatching[i] = INSERTED; // -2 = insertion
+			minsert(this->inverseMatching,i,INSERTED);
 		}
 		this->deep += e;
 		if (this->deep < bound)
@@ -565,8 +572,10 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				if (VERTEXFLAG1)
 					tn->group[groupID1] = groupID2;
 				#endif
-				tn->matching[startIndex] = endIndex;
-				tn->inverseMatching[endIndex] = startIndex;
+				//tn->matching[startIndex] = endIndex;
+				minsert(tn->matching,startIndex,endIndex);
+				//tn->inverseMatching[endIndex] = startIndex;
+				minsert(tn->inverseMatching,endIndex,startIndex);
 				//cout<<"rankj = "<<rankj<<endl;
 				tn->uG1.remove(start, gn1, rankj);
 				tn->uG2.remove(end, gn2, vs2[ranki]);
@@ -578,7 +587,7 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				//tn->cost[startIndex] = tn->deep + tn->ECost;
-				cinsert(tn->cost,startIndex,tn->deep + tn->ECost);
+				//(tn->cost,startIndex,tn->deep + tn->ECost);
 				this->childs.push_back(tn);
 			}
 
@@ -592,9 +601,11 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 			int i = deleted.verifyGraphNodeID;
 			int cost = this->deep + 1;
 
-			this->matching[i] = DELETED;
+			//this->matching[i] = DELETED;
+			minsert(this->matching,i,DELETED);
 			int e = getNumberOfAdjacentverifyGraphEdges(this->matching, adjList1, i);
-			this->matching[i] = UNMAPPED;
+			//this->matching[i] = UNMAPPED;
+            minsert(this->matching,i,UNMAPPED);
 
 			cost += e;
 			int cvl = computeCVL(lv1, deleted.verifyGraphNodeStr, lv2, DELETED);
@@ -611,7 +622,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 					tn->group[groupID1] = 1024;
 				}
 				#endif
-				tn->matching[i] = DELETED;
+				//tn->matching[i] = DELETED;
+				minsert(tn->matching,i,DELETED);
 				tn->uG1.remove(deleted, gn1, rankj);
 				tn->updateCVL(tn->lv1, deleted.verifyGraphNodeStr, tn->lv2, DELETED, cvl); //lv1, lv2				
 				tn->updateCEL (i, DELETED, e1, e2, cel); //le1, le2
@@ -621,7 +633,7 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				tn->deep = cost;
 				tn->ECost = estimate_cost;
 				//tn->cost[i] = tn->deep + tn->ECost;
-				cinsert(tn->cost,i,tn->deep + tn->ECost);
+				//cinsert(tn->cost,i,tn->deep + tn->ECost);
 				this->childs.push_back(tn);
 			}
 		}

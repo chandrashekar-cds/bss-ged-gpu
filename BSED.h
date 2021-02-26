@@ -3,7 +3,6 @@
 #include "stdafx.h"
 #include "treeNode.h"
 #include <omp.h>
-#include "global.h"
 
 typedef treeNode * PNode;
 struct cmpPNode
@@ -247,7 +246,7 @@ public:
 	                /*
 	                cout<<"###################################################################### "<<endl; 
         	        cout<<"*****************Contents of nodes at level "<<lvlcounter<<"***********************"<<endl;	
-			        cout<<"###################################################################### "<<endl;
+			cout<<"###################################################################### "<<endl;
 					for(auto i = 0;i < node->childs.size(); i++)
 					{
 						
@@ -267,8 +266,8 @@ public:
 
 					}
 					cout<<"---------------------------------------------------------------------- "<<endl;
-					//cout<<" totalExpandNode - "<<totalExpandNode<<endl;
-					*/
+					//cout<<" totalExpandNode - "<<totalExpandNode<<endl;*/
+					
 				}
 				expandSuccNode(node->childs, succ, size);                   // imp
 			}
