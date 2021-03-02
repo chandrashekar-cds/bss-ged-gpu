@@ -96,8 +96,8 @@ void treeNode::init(graph &g1, graph &g2)
 
 	//this->matching = new u16[uG1.gs];
 	//memset(matching, 0xff, uG1.gs * sizeof(u16));
-	//this->inverseMatching = new u16[uG2.gs];
-	//memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
+	this->inverseMatching = new u16[uG2.gs];
+	memset(inverseMatching, 0xff, uG2.gs * sizeof(u16));
 	//this->cost = new int[uG1.gs];
 	//memset(cost, 0, uG1.gs * sizeof(int));
 
@@ -509,8 +509,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 		{
 			int i = vs2[j];
 			e += this->getNumberOfAdjacentverifyGraphEdges(this->inverseMatching, adjList2, i);
-			//this->inverseMatching[i] = INSERTED; // -2 = insertion
-			minsert(this->inverseMatching,i,INSERTED);
+			this->inverseMatching[i] = INSERTED; // -2 = insertion
+			//minsert(this->inverseMatching,i,INSERTED);
 		}
 		this->deep += e;
 		if (this->deep < bound)
@@ -574,8 +574,8 @@ void treeNode::generateSuccessors(int &bound, vector<int> &group_1, vector<int> 
 				#endif
 				//tn->matching[startIndex] = endIndex;
 				minsert(tn->matching,startIndex,endIndex);
-				//tn->inverseMatching[endIndex] = startIndex;
-				minsert(tn->inverseMatching,endIndex,startIndex);
+				tn->inverseMatching[endIndex] = startIndex;
+				//minsert(tn->inverseMatching,endIndex,startIndex);
 				//cout<<"rankj = "<<rankj<<endl;
 				tn->uG1.remove(start, gn1, rankj);
 				tn->uG2.remove(end, gn2, vs2[ranki]);

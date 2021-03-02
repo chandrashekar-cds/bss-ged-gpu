@@ -13,8 +13,9 @@ public:
 	Dictmap group;
 	//int *cost;                           // space reduction target
 	//std::vector<int>  cost;
-	//u16 *matching, *inverseMatching;             // space reduction target
-	std::vector<u16> matching, inverseMatching;
+	//u16 *matching, 
+	u16 *inverseMatching;             // space reduction target
+	std::vector<u16> matching;//inverseMatching;
 	//MOD here
 	//u16 *degree1, *degree2;                      // space reduction target
 	u16 *lv1, *lv2;
@@ -26,7 +27,8 @@ public:
 	treeNode()
 	{
 		this->ECost = this->deep = 0;
-		//this->matching = this->inverseMatching = 0;
+		//this->matching = 0;
+		this->inverseMatching = 0;
 		this->CVLabel = this->CELabel = 0;
 		this->visited = false;
 
@@ -48,10 +50,10 @@ public:
 		{			
 			this->uG1 = tn.uG1; this->uG2 = tn.uG2;
 			//matching = new u16[uG1.gs]; memcpy(matching, tn.matching, sizeof(u16) * uG1.gs);
-			//inverseMatching = new u16[uG2.gs];
-			//memcpy(inverseMatching, tn.inverseMatching, sizeof(u16) * uG2.gs);
+			inverseMatching = new u16[uG2.gs];
+			memcpy(inverseMatching, tn.inverseMatching, sizeof(u16) * uG2.gs);
             this->matching = tn.matching;
-			this->inverseMatching = tn.inverseMatching;
+			//this->inverseMatching = tn.inverseMatching;
 
 			this->lv1 = new u16[max_v_1]; memcpy(lv1, tn.lv1, max_v_1);
 			this->lv2 = new u16[max_v_2]; memcpy(lv2, tn.lv2, max_v_2);
@@ -101,11 +103,11 @@ public:
 		/*if (matching)
 		{
 			delete[]matching; matching = 0;
-		}
+		}*/
 		if (inverseMatching)
 		{
 			delete[] inverseMatching; inverseMatching = 0;
-		}*/
+		}
 		if (lv1)
 		{
 			delete[] lv1; lv1 = 0;
@@ -162,6 +164,16 @@ public:
 		{
 			int idx = adjList[i][j];
 			if (mfind(m,idx) != UNMAPPED) e += 1;
+		}
+		return e;
+	}
+	inline int getNumberOfAdjacentverifyGraphEdges(u16*  &m, vector<vector<int > > &adjList, int i)
+	{
+		int e = 0;
+		for (int j = 0; j < adjList[i].size(); j++)
+		{
+			int idx = adjList[i][j];
+			if (m[idx] != UNMAPPED) e += 1;
 		}
 		return e;
 	}
