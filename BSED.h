@@ -220,19 +220,28 @@ public:
 		PQueue PQL = closed[l], PQLL, nullPQL;
 		PNode node; int size;
 		double elapsed_secs=0;
-
-		while (!PQL.empty() || !PQLL.empty())
+		int ret = 0;
+        #pragma omp parallel shared(PQL,PQLL) private(node)
+		while (!ret && (!PQL.empty() || !PQLL.empty()) )
 		{
 			size = 0;
-			while (!PQL.empty())
+			
+			while (!PQL.empty() && !ret)
 			{
+				
+				
 				node = PQL.top(); PQL.pop();
+				
 				if (node->allverifyGraphNodesUsed())
 				{
 					//assert(node->deep < bound);
 					bound = node->deep;
-					return;
+					ret = 1;
+					#pragma omp flush(ret)
 				}
+				
+				#pragma omp critical
+				{
 				if (!node->visited)
 				{
 					clock_t begin = clock();
@@ -270,15 +279,23 @@ public:
 					
 				}
 				expandSuccNode(node->childs, succ, size);                   // imp
-			}
+
+				} // end of task
+			} // end of inner while
 			pruneLayer(succ, PQLL, size);
 			PQL = PQLL; PQLL = nullPQL;
 			if (PQL.empty() && PQLL.empty())
-				return;
-			l = l + 1;
-			closed[l] = PQL;
-			bs.push(beamItem(-1, bound, NULL, NULL));
-		}
+			{
+				ret = 1;
+				#pragma omp flush(ret)
+			}
+			if(!ret)
+			{
+			   	l = l + 1;
+			   	closed[l] = PQL;
+			    bs.push(beamItem(-1, bound, NULL, NULL));
+			}
+		} // end of outside while
 
 	}
 
